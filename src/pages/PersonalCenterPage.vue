@@ -40,7 +40,7 @@
           <label>确认新密码：</label>
           <input v-model="passwordForm.confirmPassword" type="password" required />
         </div>
-        <div v-if="passwordError" class="error-message">{{ passwordError }}
+        <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
         <button type="submit" :disabled="changingPassword">修改密码</button>
         <span v-if="passwordSuccess" class="success-message">密码修改成功！</span>
       </form>

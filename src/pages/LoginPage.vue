@@ -12,7 +12,7 @@
         <input v-model="password" type="password" required />
       </div>
       <button type="submit" :disabled="loading">登录</button>
-      <p v-if="error" class="error">{{ error }}
+      <p v-if="error" class="error">{{ error }} </p>
     </form>
   </div>
 </template>
