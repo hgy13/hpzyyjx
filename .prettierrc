@@ -1,0 +1,5 @@
+{
+  "semi": false, // 句尾不加分号
+  "singleQuote": true, // 使用单引号
+  "trailingComma": "es5" // 在ES5有效的地方添加尾随逗号
+}
