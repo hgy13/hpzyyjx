@@ -1,45 +1,83 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
+import { setupAuthGuard } from './auth'
 
-// 导入组件
-import LoginPage from '../pages/LoginPage.vue'
-import DashboardPage from '../pages/DashboardPage.vue'
-import PersonalCenterPage from '../pages/PersonalCenterPage.vue'
-import NotificationCenterPage from '../pages/NotificationCenterPage.vue'
-
+// 使用动态导入，避免循环依赖
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginPage,
-    meta: { requiresAuth: false }
+    component: () => import('@/views/LoginPage.vue'),
+    meta: { 
+      requiresAuth: false, 
+      title: '登录',
+      hideHeader: true
+    }
+  },
+  {
+    path: '/',
+    redirect: '/dashboard',
+    meta: { requiresAuth: true }
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: DashboardPage,
-    meta: { requiresAuth: true },
-    children: [
-      {
-        path: '',
-        name: 'DashboardHome',
-        component: () => import('../pages/DashboardHome.vue')
-      },
-      {
-        path: 'personal',
-        name: 'PersonalCenter',
-        component: PersonalCenterPage
-      },
-      {
-        path: 'notifications',
-        name: 'NotificationCenter',
-        component: NotificationCenterPage
-      }
-    ]
+    component: () => import('@/components/layout/AppLayout.vue'),
+    meta: { 
+      requiresAuth: true, 
+      title: '仪表板',
+      roles: ['admin', 'finance', 'department_head', 'nurse_head', 'staff']
+    }
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: () => import('@/components/layout/AppLayout.vue'),
+    meta: { 
+      requiresAuth: true, 
+      title: '管理员面板', 
+      roles: ['admin'] 
+    }
+  },
+  {
+    path: '/finance/performance',
+    name: 'FinancePerformance',
+    component: () => import('@/components/layout/AppLayout.vue'),
+    meta: { 
+      requiresAuth: true, 
+      title: '绩效数据管理', 
+      roles: ['finance'] 
+    }
+  },
+  {
+    path: '/department/approval',
+    name: 'DepartmentApproval',
+    component: () => import('@/components/layout/AppLayout.vue'),
+    meta: { 
+      requiresAuth: true, 
+      title: '科室审批', 
+      roles: ['department_head', 'nurse_head'] 
+    }
+  },
+  {
+    path: '/staff/dashboard',
+    name: 'StaffDashboard',
+    component: () => import('@/components/layout/AppLayout.vue'),
+    meta: { 
+      requiresAuth: true, 
+      title: '员工面板', 
+      roles: ['staff'] 
+    }
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+    meta: { requiresAuth: false, title: '页面未找到' }
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/login'
+    redirect: '/404'
   }
 ]
 
@@ -48,20 +86,7 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('token')
-  
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    // 需要登录但未登录，跳转到登录页
-    next('/login')
-  } else if (to.path === '/login' && isAuthenticated) {
-    // 已登录但访问登录页，跳转到首页
-    next('/dashboard')
-  } else {
-    // 其他情况正常放行
-    next()
-  }
-})
+// 设置路由守卫
+setupAuthGuard(router)
 
 export default router
