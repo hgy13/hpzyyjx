@@ -69,6 +69,20 @@ const routes = [
       roles: ['staff'] 
     }
   },
+  
+{
+  path: '/',
+  component: () => import('@/layouts/DefaultLayout.vue'),
+  children: [
+    {
+      path: 'dashboard',
+      name: 'Dashboard',
+      component: () => import('@/views/Dashboard.vue'),
+      meta: { title: '数据看板' }
+    }
+    
+  ]
+},
   {
     path: '/404',
     name: 'NotFound',

@@ -8,17 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.1.0",
-    "element-plus": "^2.3.0",
-    "pinia": "^2.1.0",
     "vue": "^3.3.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "pinia": "^2.1.0",
+    "element-plus": "^2.3.0",
+    "@element-plus/icons-vue": "^2.1.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.58.0",
-    "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-vue": "^4.2.0",
-    "typescript": "^6.0.2",
     "vite": "^4.4.0"
   }
 }
